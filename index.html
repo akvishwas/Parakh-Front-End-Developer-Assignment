@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="jquery-3.6.0.js"></script>
+    <script>
+        const cart = [];
+        function addCart(item) {
+            cart.push(item);
+            alert(item + ' added to Cart');
+        }
+        function remCart(item) {
+            var pos = cart.indexOf(item);
+            if (pos < 0) {
+                alert(item + ' is not in the Cart')
+            } else {
+                cart.splice(pos, 1);
+                alert(item + ' removed from Cart');
+            }
+        }
+        function showCart() {
+            var item = "";
+            if (cart.length <= 0) {
+                alert("Cart is Empty!")
+            } else {
+                for (let i = 0; i < cart.length; i++) {
+                    item += cart[i] + '\n';
+                }
+                alert("Items in the cart: \n" + item)
+            }
+        }
+        $(function () {
+            $.getJSON('list.json', function (data) {
+                $.each(data.data, function (x, y) {
+                    var cat = y.name;
+                    document.getElementById("demoCode").innerHTML += '<div class="catagory"><h3>' + cat + '</h3><div id="' + cat + '"></div></div>';
+                    $.each(y.productList, function (a, b) {
+                        document.getElementById(cat).innerHTML += '<div id="product"><p>Name:' + b.name + '</br>Price:' + b.price + '</p>' + '<dvi id="btn">' + '<button type="button" class="button btn1" onclick="addCart(\'' + b.name + '\')">Add to the Cart</button>' + '<button type="button" class="button btn2" onclick="remCart(\'' + b.name + '\')">Remove from Cart</button></dvi>';
+                    })
+                });
+
+            });
+        })
+    </script>
+
+</head>
+
+<body>
+    <div id="demoCode">
+    </div>
+    <button type="button" class="button btn3" onclick="showCart()">Show cart</button>
+</body>
+<html>
